@@ -1,0 +1,35 @@
+{
+  "name": "next-prisma-gqless-nexus",
+  "version": "1.0.0",
+  "repository": "https://github.com/PabloSzx/next-prisma-gqless-nexus.git",
+  "license": "MIT",
+  "author": "PabloSzx",
+  "main": "pages/index.tsx",
+  "scripts": {
+    "build": "next build",
+    "dev": "next",
+    "migrate:save": "prisma migrate save --experimental",
+    "migrate:up": "prisma migrate up --experimental",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@nexus/schema": "^0.13.1",
+    "@prisma/client": "^2.0.0-beta.4",
+    "gqless": "^0.0.1-alpha.29",
+    "gqless-hooks": "^1.0.9",
+    "graphql": "^14.6.0",
+    "graphql-scalars": "^1.1.2",
+    "next": "^9.3.6",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-use": "^14.2.0"
+  },
+  "devDependencies": {
+    "@gqless/cli": "^0.0.1-alpha.31",
+    "@prisma/cli": "^2.0.0-beta.4",
+    "@types/node": "^13.13.4",
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.7",
+    "typescript": "^3.8.3"
+  }
+}
