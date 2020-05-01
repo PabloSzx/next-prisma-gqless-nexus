@@ -8,28 +8,57 @@
   "scripts": {
     "build": "next build",
     "dev": "next",
+    "generate": "run-p generate:*",
+    "generate:gqless": "gqless generate",
+    "generate:prisma": "prisma generate",
     "migrate:save": "prisma migrate save --experimental",
     "migrate:up": "prisma migrate up --experimental",
     "start": "next start"
   },
+  "resolutions": {
+    "@types/react": "^16.9.34",
+    "prettier": "^2.0.5"
+  },
   "dependencies": {
     "@nexus/schema": "^0.13.1",
     "@prisma/client": "^2.0.0-beta.4",
+    "apollo-server-micro": "^2.12.0",
+    "cookie": "^0.4.1",
     "gqless": "^0.0.1-alpha.29",
     "gqless-hooks": "^1.0.9",
     "graphql": "^14.6.0",
     "graphql-scalars": "^1.1.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "micro": "^9.3.4",
     "next": "^9.3.6",
+    "npm-run-all": "^4.1.5",
+    "nprogress": "^0.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-use": "^14.2.0"
+    "react-use": "^14.2.0",
+    "utility-types": "^3.10.0"
   },
   "devDependencies": {
     "@gqless/cli": "^0.0.1-alpha.31",
+    "@next/bundle-analyzer": "^9.3.6",
     "@prisma/cli": "^2.0.0-beta.4",
+    "@types/cookie": "^0.3.3",
+    "@types/jsonwebtoken": "^8.3.9",
+    "@types/lodash": "^4.14.150",
+    "@types/micro": "^7.3.3",
     "@types/node": "^13.13.4",
+    "@types/nprogress": "^0.2.0",
+    "@types/prettier": "^2.0.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
+    "babel-plugin-lodash": "^3.3.4",
+    "cross-env": "^7.0.2",
+    "prettier": "^2.0.5",
     "typescript": "^3.8.3"
+  },
+  "gqless": {
+    "url": "http://localhost:3000/api/graphql",
+    "outputDir": "src/graphql"
   }
 }
