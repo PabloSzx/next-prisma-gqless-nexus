@@ -1,15 +1,17 @@
 import { GetServerSideProps, NextPage } from "next";
 
-import { User, PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { PrismaClient, User } from "@prisma/client";
 
 interface IndexProps {
   users: User[];
 }
 
 export const getServerSideProps: GetServerSideProps<IndexProps> = async () => {
-  const users = await prisma.user.findMany();
+  const prisma = new PrismaClient();
+
+  const users = await prisma.user.findMany().finally(() => {
+    prisma.disconnect();
+  });
   return {
     props: {
       users,

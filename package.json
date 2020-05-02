@@ -8,12 +8,17 @@
   "scripts": {
     "build": "next build",
     "dev": "next",
-    "generate": "run-p generate:*",
-    "generate:gqless": "gqless generate",
+    "generate": "run-p -l generate:*",
+    "generate:gqless": "wait-on -i 1000 -t 20000 -l tcp:3000 && gqless generate",
+    "generate:nexus": "cross-env GENERATE=1 NODE_ENV=development ts-node -T -P ./tsconfig.node.json ./src/api/schema.ts",
     "generate:prisma": "prisma generate",
+    "introspect": "prisma introspect",
     "migrate:save": "prisma migrate save --experimental",
     "migrate:up": "prisma migrate up --experimental",
-    "start": "next start"
+    "start": "next start",
+    "watch": "run-p -l watch:*",
+    "watch:nexus": "cross-env GENERATE=1 NODE_ENV=development ts-node-dev --ignore-watch node_modules --respawn -T -P ./tsconfig.node.json ./src/api/schema.ts",
+    "watch:prisma": "prisma generate --watch"
   },
   "resolutions": {
     "@types/react": "^16.9.34",
@@ -21,17 +26,22 @@
   },
   "dependencies": {
     "@nexus/schema": "^0.13.1",
-    "@prisma/client": "^2.0.0-beta.4",
+    "@prisma/client": "2.0.0-beta.4",
     "apollo-server-micro": "^2.12.0",
     "cookie": "^0.4.1",
     "gqless": "^0.0.1-alpha.29",
     "gqless-hooks": "^1.0.9",
     "graphql": "^14.6.0",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-middleware": "^4.0.2",
     "graphql-scalars": "^1.1.2",
+    "graphql-shield": "^7.2.6",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.15",
     "micro": "^9.3.4",
-    "next": "^9.3.6",
+    "next": "^9.3.7-canary.6",
+    "nexus-plugin-prisma": "^0.7.0",
+    "nexus-prisma": "^0.13.0-next.2",
     "npm-run-all": "^4.1.5",
     "nprogress": "^0.2.0",
     "react": "^16.13.1",
@@ -42,8 +52,9 @@
   "devDependencies": {
     "@gqless/cli": "^0.0.1-alpha.31",
     "@next/bundle-analyzer": "^9.3.6",
-    "@prisma/cli": "^2.0.0-beta.4",
+    "@prisma/cli": "2.0.0-beta.4",
     "@types/cookie": "^0.3.3",
+    "@types/graphql-iso-date": "^3.3.3",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/lodash": "^4.14.150",
     "@types/micro": "^7.3.3",
@@ -55,7 +66,10 @@
     "babel-plugin-lodash": "^3.3.4",
     "cross-env": "^7.0.2",
     "prettier": "^2.0.5",
-    "typescript": "^3.8.3"
+    "ts-node": "^8.9.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.8.3",
+    "wait-on": "^4.0.2"
   },
   "gqless": {
     "url": "http://localhost:3000/api/graphql",

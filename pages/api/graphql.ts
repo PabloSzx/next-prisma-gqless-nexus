@@ -1,17 +1,26 @@
 import { ApolloServer } from "apollo-server-micro";
 
-import { IS_DEVELOPMENT } from "../../src/utils/constants";
+import { PrismaClient } from "@prisma/client";
+import { schema } from "@src/api/schema";
+import { IS_DEVELOPMENT } from "@src/utils/constants";
 
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
-import { schema } from "../../src/api/schema";
 
-const buildContext = ({}: { req: NextApiRequest; res: NextApiResponse }) => {
-  return {};
+export type Context = ReturnType<typeof buildContext>;
+
+export const buildContext = ({}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}) => {
+  const prisma = new PrismaClient();
+  return {
+    prisma,
+  };
 };
 
 declare global {
   interface NexusGen {
-    context: ReturnType<typeof buildContext>;
+    context: Context;
   }
 }
 

@@ -18,9 +18,50 @@ type Extension<TName extends string> = TName extends keyof typeof extensions
 type t_Query = FieldsType<
   {
     __typename: t_String<"Query">;
+    users: t_User[];
+    posts: t_Post[];
     ok: t_Boolean;
   },
   Extension<"Query">
+>;
+
+/**
+ * @name User
+ * @type OBJECT
+ */
+type t_User = FieldsType<
+  {
+    __typename: t_String<"User">;
+    id: t_Int;
+    email: t_String;
+    name?: t_String | null;
+  },
+  Extension<"User">
+>;
+
+/**
+ * @name Int
+ * @type SCALAR
+ */
+type t_Int<T extends number = number> = ScalarType<T, Extension<"Int">>;
+
+/**
+ * @name String
+ * @type SCALAR
+ */
+type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
+
+/**
+ * @name Post
+ * @type OBJECT
+ */
+type t_Post = FieldsType<
+  {
+    __typename: t_String<"Post">;
+    id: t_Int;
+    title: t_String;
+  },
+  Extension<"Post">
 >;
 
 /**
@@ -122,12 +163,6 @@ type t___TypeKind = EnumType<
 >;
 
 /**
- * @name String
- * @type SCALAR
- */
-type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
-
-/**
  * @name __Field
  * @type OBJECT
  */
@@ -220,10 +255,88 @@ type t___DirectiveLocation = EnumType<
 >;
 
 /**
+ * @name DateTime
+ * @type SCALAR
+ */
+type t_DateTime<T extends any = any> = ScalarType<T, Extension<"DateTime">>;
+
+/**
+ * @name NonNegativeInt
+ * @type SCALAR
+ */
+type t_NonNegativeInt<T extends any = any> = ScalarType<
+  T,
+  Extension<"NonNegativeInt">
+>;
+
+/**
+ * @name PositiveInt
+ * @type SCALAR
+ */
+type t_PositiveInt<T extends any = any> = ScalarType<
+  T,
+  Extension<"PositiveInt">
+>;
+
+/**
+ * @name URL
+ * @type SCALAR
+ */
+type t_URL<T extends any = any> = ScalarType<T, Extension<"URL">>;
+
+/**
+ * @name EmailAddress
+ * @type SCALAR
+ */
+type t_EmailAddress<T extends any = any> = ScalarType<
+  T,
+  Extension<"EmailAddress">
+>;
+
+/**
+ * @name JSON
+ * @type SCALAR
+ */
+type t_JSON<T extends { [K: string]: any } = { [K: string]: any }> = ScalarType<
+  T,
+  Extension<"JSON">
+>;
+
+/**
+ * @name JSONObject
+ * @type SCALAR
+ */
+type t_JSONObject<T extends any = any> = ScalarType<T, Extension<"JSONObject">>;
+
+/**
  * @name Query
  * @type OBJECT
  */
 export type Query = TypeData<t_Query>;
+
+/**
+ * @name User
+ * @type OBJECT
+ */
+export type User = TypeData<t_User>;
+
+/**
+ * @name Int
+ * @type SCALAR
+ */
+export type Int = TypeData<t_Int>;
+
+/**
+ * @name String
+ * @type SCALAR
+ */
+export type String = TypeData<t_String>;
+
+/**
+ * @name Post
+ * @type OBJECT
+ */
+export type Post = TypeData<t_Post>;
 
 /**
  * @name Boolean
@@ -263,12 +376,6 @@ export enum __TypeKind {
   LIST = "LIST",
   NON_NULL = "NON_NULL",
 }
-
-/**
- * @name String
- * @type SCALAR
- */
-export type String = TypeData<t_String>;
 
 /**
  * @name __Field
@@ -319,3 +426,45 @@ export enum __DirectiveLocation {
   INPUT_OBJECT = "INPUT_OBJECT",
   INPUT_FIELD_DEFINITION = "INPUT_FIELD_DEFINITION",
 }
+
+/**
+ * @name DateTime
+ * @type SCALAR
+ */
+export type DateTime = TypeData<t_DateTime>;
+
+/**
+ * @name NonNegativeInt
+ * @type SCALAR
+ */
+export type NonNegativeInt = TypeData<t_NonNegativeInt>;
+
+/**
+ * @name PositiveInt
+ * @type SCALAR
+ */
+export type PositiveInt = TypeData<t_PositiveInt>;
+
+/**
+ * @name URL
+ * @type SCALAR
+ */
+export type URL = TypeData<t_URL>;
+
+/**
+ * @name EmailAddress
+ * @type SCALAR
+ */
+export type EmailAddress = TypeData<t_EmailAddress>;
+
+/**
+ * @name JSON
+ * @type SCALAR
+ */
+export type JSON = TypeData<t_JSON>;
+
+/**
+ * @name JSONObject
+ * @type SCALAR
+ */
+export type JSONObject = TypeData<t_JSONObject>;

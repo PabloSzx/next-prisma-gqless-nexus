@@ -1,39 +1,48 @@
+import { applyMiddleware } from "graphql-middleware";
+import { nexusPrismaPlugin } from "nexus-prisma";
 import { resolve } from "path";
 
 import { makeSchema } from "@nexus/schema";
 
+import { IS_DEVELOPMENT, PWD } from "../utils/constants";
+import { permissions } from "./permissions";
 import * as types from "./types";
-import { IS_DEVELOPMENT } from "../utils/constants";
 
-export const schema = makeSchema({
+const nexusSchema = makeSchema({
   types,
-  outputs: IS_DEVELOPMENT
-    ? {
-        schema: resolve(
-          process.env.PWD ?? "",
-          "./src/graphql/generated/schema.graphql"
-        ),
-        typegen: resolve(
-          process.env.PWD ?? "",
-          "./src/graphql/generated/apiTypings.ts"
-        ),
-      }
-    : false,
-
+  shouldGenerateArtifacts: IS_DEVELOPMENT,
+  outputs: {
+    schema: resolve(PWD, "./src/graphql/generated/schema.graphql"),
+    typegen: resolve(PWD, "./src/graphql/generated/apiTypings.ts"),
+  },
   typegenAutoConfig: {
-    headers: ['import { ObjectId } from "mongodb";'],
+    headers: ['import { Context } from "@pages/api/graphql";'],
     sources: [],
     backingTypeMap: {
-      ObjectId: "ObjectId",
       DateTime: "Date",
       NonNegativeInt: "number",
       PositiveInt: "number",
       URL: "string",
     },
+    contextType: "Context",
   },
   nonNullDefaults: {
     output: true,
     input: true,
   },
   prettierConfig: {},
+  plugins: [
+    nexusPrismaPlugin({
+      outputs: {
+        typegen: resolve(PWD, "./src/graphql/generated/apiPrismaTypings.ts"),
+      },
+      shouldGenerateArtifacts: IS_DEVELOPMENT,
+    }),
+  ],
 });
+
+export const schema = applyMiddleware(nexusSchema, permissions);
+
+if (process.env.GENERATE) {
+  console.log("✔ Nexus schema types generated!");
+}

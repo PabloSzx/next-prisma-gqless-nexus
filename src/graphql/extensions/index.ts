@@ -1,5 +1,14 @@
 export const Query = {};
 
+export declare const DateTime: string;
+
+export declare const PositiveInt: number;
+export declare const NonNegativeInt: number;
+export declare const URL: string;
+export declare const JSONObject: Record<string, any>;
+export declare const JSON: any;
+export declare const EmailAddress: string;
+
 /**
  * Add a key to a type
  */

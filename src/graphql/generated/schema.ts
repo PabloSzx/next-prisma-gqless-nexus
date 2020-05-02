@@ -15,11 +15,66 @@ export const schema = {
   get Query() {
     return new ObjectNode(
       {
+        get users() {
+          return new FieldNode(
+            new ArrayNode(schema.User, false),
+            undefined,
+            false
+          );
+        },
+        get posts() {
+          return new FieldNode(
+            new ArrayNode(schema.Post, false),
+            undefined,
+            false
+          );
+        },
         get ok() {
           return new FieldNode(schema.Boolean, undefined, false);
         },
       },
       { name: "Query", extension: ((extensions as any) || {}).Query }
+    );
+  },
+  get User() {
+    return new ObjectNode(
+      {
+        get id() {
+          return new FieldNode(schema.Int, undefined, false);
+        },
+        get email() {
+          return new FieldNode(schema.String, undefined, false);
+        },
+        get name() {
+          return new FieldNode(schema.String, undefined, true);
+        },
+      },
+      { name: "User", extension: ((extensions as any) || {}).User }
+    );
+  },
+  get Int() {
+    return new ScalarNode({
+      name: "Int",
+      extension: ((extensions as any) || {}).Int,
+    });
+  },
+  get String() {
+    return new ScalarNode({
+      name: "String",
+      extension: ((extensions as any) || {}).String,
+    });
+  },
+  get Post() {
+    return new ObjectNode(
+      {
+        get id() {
+          return new FieldNode(schema.Int, undefined, false);
+        },
+        get title() {
+          return new FieldNode(schema.String, undefined, false);
+        },
+      },
+      { name: "Post", extension: ((extensions as any) || {}).Post }
     );
   },
   get Boolean() {
@@ -133,12 +188,6 @@ export const schema = {
   get __TypeKind() {
     return new EnumNode({ name: "__TypeKind" });
   },
-  get String() {
-    return new ScalarNode({
-      name: "String",
-      extension: ((extensions as any) || {}).String,
-    });
-  },
   get __Field() {
     return new ObjectNode(
       {
@@ -244,6 +293,48 @@ export const schema = {
   },
   get __DirectiveLocation() {
     return new EnumNode({ name: "__DirectiveLocation" });
+  },
+  get DateTime() {
+    return new ScalarNode({
+      name: "DateTime",
+      extension: ((extensions as any) || {}).DateTime,
+    });
+  },
+  get NonNegativeInt() {
+    return new ScalarNode({
+      name: "NonNegativeInt",
+      extension: ((extensions as any) || {}).NonNegativeInt,
+    });
+  },
+  get PositiveInt() {
+    return new ScalarNode({
+      name: "PositiveInt",
+      extension: ((extensions as any) || {}).PositiveInt,
+    });
+  },
+  get URL() {
+    return new ScalarNode({
+      name: "URL",
+      extension: ((extensions as any) || {}).URL,
+    });
+  },
+  get EmailAddress() {
+    return new ScalarNode({
+      name: "EmailAddress",
+      extension: ((extensions as any) || {}).EmailAddress,
+    });
+  },
+  get JSON() {
+    return new ScalarNode({
+      name: "JSON",
+      extension: ((extensions as any) || {}).JSON,
+    });
+  },
+  get JSONObject() {
+    return new ScalarNode({
+      name: "JSONObject",
+      extension: ((extensions as any) || {}).JSONObject,
+    });
   },
 };
 
