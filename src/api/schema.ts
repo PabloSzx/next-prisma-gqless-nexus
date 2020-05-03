@@ -8,7 +8,7 @@ import { IS_DEVELOPMENT, PWD } from "../utils/constants";
 import { permissions } from "./permissions";
 import * as types from "./types";
 
-const nexusSchema = makeSchema({
+export const nexusSchema = makeSchema({
   types,
   shouldGenerateArtifacts: IS_DEVELOPMENT,
   outputs: {

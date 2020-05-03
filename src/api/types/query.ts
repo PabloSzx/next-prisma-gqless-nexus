@@ -10,8 +10,10 @@ export const Query = queryType({
     });
     t.list.field("users", {
       type: "User",
-      resolve(_root, _args, ctx) {
-        return ctx.prisma.user.findMany();
+      async resolve(_root, _args, ctx) {
+        const users = await ctx.prisma.user.findMany();
+
+        return users;
       },
     });
 

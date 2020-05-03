@@ -30,7 +30,7 @@
     "apollo-server-micro": "^2.12.0",
     "cookie": "^0.4.1",
     "gqless": "^0.0.1-alpha.29",
-    "gqless-hooks": "^1.0.9",
+    "gqless-hooks": "^1.1.1",
     "graphql": "^14.6.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-middleware": "^4.0.2",

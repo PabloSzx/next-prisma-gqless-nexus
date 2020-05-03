@@ -18,6 +18,7 @@ type Extension<TName extends string> = TName extends keyof typeof extensions
 type t_Query = FieldsType<
   {
     __typename: t_String<"Query">;
+    profiles: t_Profile[];
     users: t_User[];
     posts: t_Post[];
     ok: t_Boolean;
@@ -26,18 +27,25 @@ type t_Query = FieldsType<
 >;
 
 /**
- * @name User
+ * @name Profile
  * @type OBJECT
  */
-type t_User = FieldsType<
+type t_Profile = FieldsType<
   {
-    __typename: t_String<"User">;
+    __typename: t_String<"Profile">;
+    bio: t_String;
     id: t_Int;
-    email: t_String;
-    name?: t_String | null;
+    user: t_User;
+    userId: t_Int;
   },
-  Extension<"User">
+  Extension<"Profile">
 >;
+
+/**
+ * @name String
+ * @type SCALAR
+ */
+type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
 
 /**
  * @name Int
@@ -46,10 +54,42 @@ type t_User = FieldsType<
 type t_Int<T extends number = number> = ScalarType<T, Extension<"Int">>;
 
 /**
- * @name String
- * @type SCALAR
+ * @name User
+ * @type OBJECT
  */
-type t_String<T extends string = string> = ScalarType<T, Extension<"String">>;
+type t_User = FieldsType<
+  {
+    __typename: t_String<"User">;
+    profile?: t_Profile | null;
+    role: t_Role;
+    id: t_Int;
+    email: t_String;
+    name?: t_String | null;
+    posts: FieldsTypeArg<
+      {
+        skip: number;
+        after?: PostWhereUniqueInput | null;
+        before?: PostWhereUniqueInput | null;
+        first: number;
+        last: number;
+      },
+      t_Post[]
+    >;
+  },
+  Extension<"User">
+>;
+
+/**
+ * @name Role
+ * @type ENUM
+ */
+type t_Role = EnumType<"USER" | "ADMIN">;
+
+/**
+ * @name PostWhereUniqueInput
+ * @type INPUT_OBJECT
+ */
+export type PostWhereUniqueInput = { id?: number | null };
 
 /**
  * @name Post
@@ -60,9 +100,58 @@ type t_Post = FieldsType<
     __typename: t_String<"Post">;
     id: t_Int;
     title: t_String;
+    author: t_User;
+    authorId: t_Int;
+    categories: FieldsTypeArg<
+      {
+        skip: number;
+        after?: CategoryWhereUniqueInput | null;
+        before?: CategoryWhereUniqueInput | null;
+        first: number;
+        last: number;
+      },
+      t_Category[]
+    >;
+    createdAt: t_DateTime;
+    published: t_Boolean;
   },
   Extension<"Post">
 >;
+
+/**
+ * @name CategoryWhereUniqueInput
+ * @type INPUT_OBJECT
+ */
+export type CategoryWhereUniqueInput = { id?: number | null };
+
+/**
+ * @name Category
+ * @type OBJECT
+ */
+type t_Category = FieldsType<
+  {
+    __typename: t_String<"Category">;
+    id: t_Int;
+    name: t_String;
+    posts: FieldsTypeArg<
+      {
+        skip: number;
+        after?: PostWhereUniqueInput | null;
+        before?: PostWhereUniqueInput | null;
+        first: number;
+        last: number;
+      },
+      t_Post[]
+    >;
+  },
+  Extension<"Category">
+>;
+
+/**
+ * @name DateTime
+ * @type SCALAR
+ */
+type t_DateTime<T extends any = any> = ScalarType<T, Extension<"DateTime">>;
 
 /**
  * @name Boolean
@@ -80,10 +169,168 @@ type t_Boolean<T extends boolean = boolean> = ScalarType<
 type t_Mutation = FieldsType<
   {
     __typename: t_String<"Mutation">;
+    createOneUser: FieldsTypeArg<{ data: UserCreateInput }, t_User>;
+    createOneCategory: FieldsTypeArg<{ data: CategoryCreateInput }, t_Category>;
+    createOneProfile: FieldsTypeArg<{ data: ProfileCreateInput }, t_Profile>;
     ok: t_Boolean;
   },
   Extension<"Mutation">
 >;
+
+/**
+ * @name UserCreateInput
+ * @type INPUT_OBJECT
+ */
+export type UserCreateInput = {
+  email: string;
+  name?: string | null;
+  role?: Role | null;
+  posts?: PostCreateManyWithoutAuthorInput | null;
+  profile?: ProfileCreateOneWithoutUserInput | null;
+};
+
+/**
+ * @name PostCreateManyWithoutAuthorInput
+ * @type INPUT_OBJECT
+ */
+export type PostCreateManyWithoutAuthorInput = {
+  create?: PostCreateWithoutAuthorInput[] | null;
+  connect?: PostWhereUniqueInput[] | null;
+};
+
+/**
+ * @name PostCreateWithoutAuthorInput
+ * @type INPUT_OBJECT
+ */
+export type PostCreateWithoutAuthorInput = {
+  createdAt?: any | null;
+  title: string;
+  published?: boolean | null;
+  categories?: CategoryCreateManyWithoutPostsInput | null;
+};
+
+/**
+ * @name CategoryCreateManyWithoutPostsInput
+ * @type INPUT_OBJECT
+ */
+export type CategoryCreateManyWithoutPostsInput = {
+  create?: CategoryCreateWithoutPostsInput[] | null;
+  connect?: CategoryWhereUniqueInput[] | null;
+};
+
+/**
+ * @name CategoryCreateWithoutPostsInput
+ * @type INPUT_OBJECT
+ */
+export type CategoryCreateWithoutPostsInput = { name: string };
+
+/**
+ * @name ProfileCreateOneWithoutUserInput
+ * @type INPUT_OBJECT
+ */
+export type ProfileCreateOneWithoutUserInput = {
+  create?: ProfileCreateWithoutUserInput | null;
+  connect?: ProfileWhereUniqueInput | null;
+};
+
+/**
+ * @name ProfileCreateWithoutUserInput
+ * @type INPUT_OBJECT
+ */
+export type ProfileCreateWithoutUserInput = { bio: string };
+
+/**
+ * @name ProfileWhereUniqueInput
+ * @type INPUT_OBJECT
+ */
+export type ProfileWhereUniqueInput = { id?: number | null };
+
+/**
+ * @name CategoryCreateInput
+ * @type INPUT_OBJECT
+ */
+export type CategoryCreateInput = {
+  name: string;
+  posts?: PostCreateManyWithoutCategoriesInput | null;
+};
+
+/**
+ * @name PostCreateManyWithoutCategoriesInput
+ * @type INPUT_OBJECT
+ */
+export type PostCreateManyWithoutCategoriesInput = {
+  create?: PostCreateWithoutCategoriesInput[] | null;
+  connect?: PostWhereUniqueInput[] | null;
+};
+
+/**
+ * @name PostCreateWithoutCategoriesInput
+ * @type INPUT_OBJECT
+ */
+export type PostCreateWithoutCategoriesInput = {
+  createdAt?: any | null;
+  title: string;
+  published?: boolean | null;
+  author: UserCreateOneWithoutPostsInput;
+};
+
+/**
+ * @name UserCreateOneWithoutPostsInput
+ * @type INPUT_OBJECT
+ */
+export type UserCreateOneWithoutPostsInput = {
+  create?: UserCreateWithoutPostsInput | null;
+  connect?: UserWhereUniqueInput | null;
+};
+
+/**
+ * @name UserCreateWithoutPostsInput
+ * @type INPUT_OBJECT
+ */
+export type UserCreateWithoutPostsInput = {
+  email: string;
+  name?: string | null;
+  role?: Role | null;
+  profile?: ProfileCreateOneWithoutUserInput | null;
+};
+
+/**
+ * @name UserWhereUniqueInput
+ * @type INPUT_OBJECT
+ */
+export type UserWhereUniqueInput = {
+  id?: number | null;
+  email?: string | null;
+};
+
+/**
+ * @name ProfileCreateInput
+ * @type INPUT_OBJECT
+ */
+export type ProfileCreateInput = {
+  bio: string;
+  user: UserCreateOneWithoutProfileInput;
+};
+
+/**
+ * @name UserCreateOneWithoutProfileInput
+ * @type INPUT_OBJECT
+ */
+export type UserCreateOneWithoutProfileInput = {
+  create?: UserCreateWithoutProfileInput | null;
+  connect?: UserWhereUniqueInput | null;
+};
+
+/**
+ * @name UserCreateWithoutProfileInput
+ * @type INPUT_OBJECT
+ */
+export type UserCreateWithoutProfileInput = {
+  email: string;
+  name?: string | null;
+  role?: Role | null;
+  posts?: PostCreateManyWithoutAuthorInput | null;
+};
 
 /**
  * @name __Schema
@@ -255,12 +502,6 @@ type t___DirectiveLocation = EnumType<
 >;
 
 /**
- * @name DateTime
- * @type SCALAR
- */
-type t_DateTime<T extends any = any> = ScalarType<T, Extension<"DateTime">>;
-
-/**
  * @name NonNegativeInt
  * @type SCALAR
  */
@@ -315,16 +556,10 @@ type t_JSONObject<T extends any = any> = ScalarType<T, Extension<"JSONObject">>;
 export type Query = TypeData<t_Query>;
 
 /**
- * @name User
+ * @name Profile
  * @type OBJECT
  */
-export type User = TypeData<t_User>;
-
-/**
- * @name Int
- * @type SCALAR
- */
-export type Int = TypeData<t_Int>;
+export type Profile = TypeData<t_Profile>;
 
 /**
  * @name String
@@ -333,10 +568,43 @@ export type Int = TypeData<t_Int>;
 export type String = TypeData<t_String>;
 
 /**
+ * @name Int
+ * @type SCALAR
+ */
+export type Int = TypeData<t_Int>;
+
+/**
+ * @name User
+ * @type OBJECT
+ */
+export type User = TypeData<t_User>;
+
+/**
+ * @name Role
+ * @type ENUM
+ */
+export enum Role {
+  USER = "USER",
+  ADMIN = "ADMIN",
+}
+
+/**
  * @name Post
  * @type OBJECT
  */
 export type Post = TypeData<t_Post>;
+
+/**
+ * @name Category
+ * @type OBJECT
+ */
+export type Category = TypeData<t_Category>;
+
+/**
+ * @name DateTime
+ * @type SCALAR
+ */
+export type DateTime = TypeData<t_DateTime>;
 
 /**
  * @name Boolean
@@ -426,12 +694,6 @@ export enum __DirectiveLocation {
   INPUT_OBJECT = "INPUT_OBJECT",
   INPUT_FIELD_DEFINITION = "INPUT_FIELD_DEFINITION",
 }
-
-/**
- * @name DateTime
- * @type SCALAR
- */
-export type DateTime = TypeData<t_DateTime>;
 
 /**
  * @name NonNegativeInt

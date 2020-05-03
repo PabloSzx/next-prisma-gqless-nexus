@@ -1,15 +1,19 @@
-import { schema, Query, Mutation } from "./generated";
+import { createUseMutation, createUseQuery } from "gqless-hooks";
 
-import { createUseQuery, createUseMutation } from "gqless-hooks";
+import { IS_BROWSER } from "@src/utils/constants";
 
-const endpoint = "http://localhost:3000/api/graphql";
+import { Mutation, Query, schema } from "./generated";
 
-export const useQuery = createUseQuery<Query>({
+const endpoint = IS_BROWSER
+  ? "/api/graphql"
+  : "http://localhost:3000/api/graphql";
+
+export const { useQuery, prepareQuery } = createUseQuery<Query>({
   schema,
-  endpoint
+  endpoint,
 });
 
 export const useMutation = createUseMutation<Mutation>({
   schema,
-  endpoint
+  endpoint,
 });
