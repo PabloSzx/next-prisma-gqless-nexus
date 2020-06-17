@@ -317,10 +317,6 @@ export interface NexusGenArgTypes {
   Category: {
     posts: {
       // args
-      after?: NexusGenInputs["PostWhereUniqueInput"] | null; // PostWhereUniqueInput
-      before?: NexusGenInputs["PostWhereUniqueInput"] | null; // PostWhereUniqueInput
-      first: number; // Int!
-      last: number; // Int!
       skip: number; // Int!
     };
   };
@@ -341,20 +337,12 @@ export interface NexusGenArgTypes {
   Post: {
     categories: {
       // args
-      after?: NexusGenInputs["CategoryWhereUniqueInput"] | null; // CategoryWhereUniqueInput
-      before?: NexusGenInputs["CategoryWhereUniqueInput"] | null; // CategoryWhereUniqueInput
-      first: number; // Int!
-      last: number; // Int!
       skip: number; // Int!
     };
   };
   User: {
     posts: {
       // args
-      after?: NexusGenInputs["PostWhereUniqueInput"] | null; // PostWhereUniqueInput
-      before?: NexusGenInputs["PostWhereUniqueInput"] | null; // PostWhereUniqueInput
-      first: number; // Int!
-      last: number; // Int!
       skip: number; // Int!
     };
   };
